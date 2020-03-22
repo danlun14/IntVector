@@ -22,7 +22,13 @@ IntVector* int_vector_copy(const IntVector* v)
     if (v2 == NULL) {
         return NULL;
     }
-    memcpy(v2, v, v->capacity);
+    memcpy(v2->data, v->data, v->capacity);
+    if (v2->data == NULL) && (v->capacity != 0) {
+	free(v2);
+	return NULL;
+    }
+    v2->size = v->size;
+    v2->capacity = v->capacity;
     return v2;
 }
 
