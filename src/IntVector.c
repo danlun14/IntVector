@@ -79,9 +79,7 @@ int int_vector_push_back(IntVector *v, int item)
     }
     else
     {
-        int *v2 = malloc(v->capacity * sizeof(int));
-        memcpy(v2, v->data, v->capacity * sizeof(int));
-        v2 = realloc(v2, 2 * v->capacity * sizeof(int) + sizeof(int));
+        int *v2 = realloc(v->data, 2 * v->capacity * sizeof(int) + sizeof(int));
         if (v2 == NULL)
         {
 
@@ -89,7 +87,6 @@ int int_vector_push_back(IntVector *v, int item)
         }
         v->capacity *= 2;
         v->capacity++;
-        free(v->data);
         v->data = v2;
         v->data[v->size] = item;
         v->size++;
@@ -120,7 +117,9 @@ int int_vector_shrink_to_fit(IntVector *v)
     {
         return -1;
     }
-    int *v2 = realloc(v->data, v->size * sizeof(int));
+    int *v2 = malloc(v->capacity * sizeof(int));
+    memcpy(v2, v->data, v->capacity);
+    v2 = realloc(v2, v->size * sizeof(int));
     if (v2 == NULL)
     {
         return -1;
@@ -133,19 +132,27 @@ int int_vector_shrink_to_fit(IntVector *v)
 
 int int_vector_resize(IntVector *v, size_t new_size)
 {
-    if (v->size < new_size)
+    if (new_size == 0)
+    {
+        free(v->data);
+        v->capacity = 0;
+    }
+    else if (v->size < new_size)
     {
         int *v2 = realloc(v->data, new_size * sizeof(int));
         if (v2 == NULL)
         {
             return -1;
         }
-        free(v->data);
         v->data = v2;
         for (int i = v->size; i < new_size; i++)
         {
             v->data[i] = 0;
         }
+    }
+    if (new_size > v->capacity)
+    {
+        v->capacity = new_size;
     }
     v->size = new_size;
     return 0;

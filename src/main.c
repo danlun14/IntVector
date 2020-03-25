@@ -1,10 +1,11 @@
 #include "IntVector.h"
 
-void print(IntVector* v)
+void print(IntVector *v)
 {
     printf("size: %ld\n", int_vector_get_size(v));
     printf("capacity: %ld\ndata:\n", int_vector_get_capacity(v));
-    for (int i = 0; i < int_vector_get_size(v); i++) {
+    for (int i = 0; i < int_vector_get_size(v); i++)
+    {
         printf("%d\t", v->data[i]);
     }
     printf("\n\n");
@@ -13,13 +14,15 @@ int main()
 {
     int status;
     printf("started\n");
-    IntVector* v;
+    IntVector *v;
     v = int_vector_new(6);
-    for (int i = 0; i < int_vector_get_capacity(v); i++) {
+    for (int i = 0; i < int_vector_get_capacity(v); i++)
+    {
         int_vector_push_back(v, i * 10);
     }
     printf("%ld\n", int_vector_get_size(v));
-    for (int i = 0; i < int_vector_get_size(v); i++) {
+    for (int i = 0; i < int_vector_get_size(v); i++)
+    {
         printf("%d\n", v->data[i]);
     }
     status = int_vector_reserve(v, 10);
