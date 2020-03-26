@@ -2,11 +2,13 @@
 
 void print(IntVector *v)
 {
+    int temp = 0;
     printf("size: %ld\n", int_vector_get_size(v));
     printf("capacity: %ld\ndata:\n", int_vector_get_capacity(v));
     for (int i = 0; i < int_vector_get_size(v); i++)
     {
-        printf("%d\t", v->data[i]);
+        temp = int_vector_get_item(v, i);
+        printf("%d\t", temp);
     }
     printf("\n\n");
 }
@@ -45,12 +47,20 @@ int main()
     printf("%d status of int_vector_push_back\n", status);
     print(v);
 
+    status = int_vector_shrink_to_fit(v);
+    printf("%d status of int_vector_shrink_to_fit %ls\n", status, v->data);
+    print(v);
+
     status = int_vector_resize(v, 0);
     printf("%d status of int_vector_resize\n", status);
     print(v);
 
     status = int_vector_shrink_to_fit(v);
-    printf("%d status of int_vector_shrink_to_fit\n", status);
+    printf("%d status of int_vector_shrink_to_fit   %ls\n", status, v->data);
+    print(v);
+
+    status = int_vector_push_back(v, 999);
+    printf("%d status of int_vector_push_back\n", status);
     print(v);
 
     int_vector_free(v);

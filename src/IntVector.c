@@ -38,8 +38,14 @@ IntVector *int_vector_copy(const IntVector *v)
 
 void int_vector_free(IntVector *v)
 {
-    free(v->data);
-    free(v);
+    if (v != NULL)
+    {
+        if (v->data != NULL)
+        {
+            free(v->data);
+        }
+        free(v);
+    }
 }
 
 int int_vector_get_item(const IntVector *v, size_t index)
@@ -109,7 +115,7 @@ int int_vector_shrink_to_fit(IntVector *v)
 {
     if (v->size == 0)
     {
-        v->data = NULL;
+        v->data = realloc(v->data, sizeof(int) * v->size);
         v->capacity = 0;
         return 0;
     }
@@ -117,14 +123,11 @@ int int_vector_shrink_to_fit(IntVector *v)
     {
         return -1;
     }
-    int *v2 = malloc(v->capacity * sizeof(int));
-    memcpy(v2, v->data, v->capacity);
-    v2 = realloc(v2, v->size * sizeof(int));
+    int *v2 = realloc(v->data, v->size * sizeof(int));
     if (v2 == NULL)
     {
         return -1;
     }
-    free(v->data);
     v->data = v2;
     v->capacity = v->size;
     return 0;
@@ -134,7 +137,6 @@ int int_vector_resize(IntVector *v, size_t new_size)
 {
     if (new_size == 0)
     {
-        free(v->data);
         v->capacity = 0;
     }
     else if (v->size < new_size)
